@@ -1,0 +1,9 @@
+application_config = {  
+"app_name": "ihr360-applet-customization-hljqys",
+"app_type": "backend",  
+"git": "git@git.ihr360.com:applet/ihr360-applet-customization-hljqys.git",
+"dockerfile_path": "ihr360-applet-customization-hljqys",
+"http_check_url": "/actuator/health",  
+"prometheus_url": "/actuator/prometheus",  
+"private_cloud_status": false,  
+}

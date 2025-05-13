@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="basePath">app-log</Property>
+        <property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
+    </Properties>
+
+    <Appenders>
+        <Console name="Out">
+            <PatternLayout charset="UTF-8">
+                <pattern>${log.pattern}</pattern>
+            </PatternLayout>
+        </Console>
+        <RollingFile name="IhrIntegrationAppLogger"
+            fileName="${basePath}/log_total.log"
+            filePattern="${basePath}/log_total-%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>${log.pattern}</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <!-- Max 10 files will be created everyday -->
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${basePathr}" maxDepth="10">
+                    <!-- Delete all files older than 30 days -->
+                    <IfLastModified age="30d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>        
+        <RollingFile name="IhrIntegrationAppEventLogger"
+            fileName="${basePath}/log_error.log"
+            filePattern="${basePath}/log_error-%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>${log.pattern}</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <!-- Max 10 files will be created everyday -->
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${basePathr}" maxDepth="10">
+                    <!-- Delete all files older than 30 days -->
+                    <IfLastModified age="30d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <!-- additivity：if logger Root has same log level as info, then same message will be print
+        twice, use additivity:false to avoid this -->        
+        <Root level="INFO">
+            <AppenderRef ref="IhrIntegrationAppEventLogger" level="ERROR" />
+            <AppenderRef ref="IhrIntegrationAppLogger" />
+            <AppenderRef ref="Out" />
+        </Root>
+        <Logger name="com.ihr360.applet" level="DEBUG" additivity="false">
+            <AppenderRef ref="IhrIntegrationAppEventLogger" level="ERROR" />
+            <AppenderRef ref="IhrIntegrationAppLogger" />
+            <AppenderRef ref="Out" />
+        </Logger>
+    </Loggers>
+</Configuration>
